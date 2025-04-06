@@ -116,6 +116,9 @@
         <p class="copyright">© 2024 Vagency</p>
     </footer>
 
+    <!-- StripeのJavaScriptライブラリを読み込む -->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <script>
         // フォーム送信時にStripeチェックアウトセッションを作成
         document.getElementById('checkout-form').addEventListener('submit', async (event) => {
@@ -126,7 +129,7 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
 
-            const response = await fetch('http://127.0.0.1:4242/create-checkout-session', {
+            const response = await fetch('http://localhost:4242/create-checkout-session', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
