@@ -106,22 +106,6 @@
             cursor: pointer;
         }
 
-        /* ヘッダーのスタイル */
-        header {
-            width: 100%;
-            background-color: #FFA500; /* オレンジの背景 */
-            padding: 3px 20px; /* 上下余白を狭くする */
-            display: flex;
-            align-items: center;
-        }
-
-        /* ヘッダーからロゴ画像を削除しただけ */
-        /* .header-logo { 
-            width: 30px;  <-- 削除
-            height: auto;
-            margin-right: 10px; <-- 削除
-        } */
-
         footer {
             width: 100%;
             background-color: #FFA500; /* オレンジの背景 */
@@ -141,10 +125,13 @@
         .footer-content h2,
         .footer-content .description {
             color: white; /* フォント色 */
+            margin: 5px 0; /* 上下の余白を3分の1に */
+            padding: 0; /* 上下の余白を削除 */
         }
 
         .copyright {
-            margin-top: 20px; /* 余白を追加 */
+            margin-top: 10px; /* 余白を追加 */
+            padding: 0;
         }
 
         .social-icon {
@@ -155,12 +142,6 @@
     </style>
 </head>
 <body>
-    <!-- ヘッダーのみ残して、ロゴを削除 -->
-    <header>
-        <!-- ロゴ画像は削除 -->
-        <!-- <img src="images/Vage_Logo.png" class="header-logo" alt="Vage Logo"> -->
-    </header>
-
     <div class="container">
         <!-- バナー画像 -->
         <div class="banner">
