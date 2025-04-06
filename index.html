@@ -106,6 +106,21 @@
             cursor: pointer;
         }
 
+        /* ヘッダーのスタイル */
+        header {
+            width: 100%;
+            background-color: #FFA500; /* オレンジの背景 */
+            padding: 5px 20px; /* ヘッダーの上下余白を非常に狭くする */
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            width: 30px; /* ロゴのサイズ調整 */
+            height: auto;
+            margin-right: 10px; /* ロゴとテキストの間に余白を追加 */
+        }
+
         footer {
             width: 100%;
             background-color: #FFA500; /* オレンジの背景 */
@@ -139,6 +154,12 @@
     </style>
 </head>
 <body>
+    <!-- ヘッダー追加 -->
+    <header>
+        <img src="images/Vage_Logo.png" class="header-logo" alt="Vage Logo">
+        <h1 style="font-size: 1.5em; color: white;">Vの切り抜きサービス</h1>
+    </header>
+
     <div class="container">
         <!-- バナー画像 -->
         <div class="banner">
