@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プラン3 - フォーム入力</title>
+    <title>プラン3 - VTuber切り抜きサービス</title>
     <style>
         body {
             font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
@@ -16,21 +16,41 @@
             margin: 0 auto;
             padding: 20px;
         }
+
+        .form-section {
+            text-align: center;
+            margin-bottom: 20px; /* 画像とフォームの間隔を狭めました */
+        }
+
+        .form-section img {
+            width: 100%;
+            max-width: 200px; /* プラン画像のサイズを6分の1に調整 */
+            height: auto;
+            margin-bottom: 20px;
+        }
+
         .purchase-form {
             background-color: #FFFFFF;
             padding: 30px;
-            margin-top: 50px;
+            margin-top: 10px; /* フォームの上部の間隔を狭めました */
             border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
+
         .purchase-form h2 {
             color: #FF9D00;
             font-size: 2em;
             margin-bottom: 20px;
         }
+
         .purchase-form label {
             display: block;
             margin: 10px 0 5px;
         }
+
         .purchase-form input, .purchase-form textarea {
             width: 100%;
             padding: 10px;
@@ -38,38 +58,62 @@
             border: 2px solid #FF9D00;
             border-radius: 5px;
         }
+
         .purchase-form button {
             background-color: #FF9D00;
-            color: #fff;
+            color: white;
             padding: 10px 20px;
-            border: none;
             border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
+
+        footer {
+            width: 100%;
+            background-color: #FFA500;
+            padding: 5px 5px;
+            text-align: center;
+            color: #555;
+            position: relative;
+            justify-content: center;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- プラン3画像 -->
+        <div class="form-section">
+            <img src="images/Plan3.jpg" alt="プラン3画像">
+        </div>
+        
         <!-- 購入フォーム -->
         <div class="purchase-form">
-            <h2>プラン3: 切り抜きフォーム</h2>
+            <h2>プラン3 - 購入フォーム</h2>
             <form action="#" method="POST">
                 <label for="video-url">切り抜き元のURL:</label>
-                <input type="url" id="video-url" name="video-url" required>
-                
+                <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
+※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
+
                 <label for="details">希望詳細:</label>
-                <textarea id="details" name="details" rows="4" required></textarea>
-                
+                <textarea id="details" name="details" rows="4" required placeholder="例:15:00〜17:30あたりを切り抜いてください！"></textarea>
+
                 <label for="name">名前:</label>
-                <input type="text" id="name" name="name" required>
-                
+                <input type="text" id="name" name="name" required placeholder="お名前を入力してください">
+
                 <label for="email">メールアドレス:</label>
-                <input type="email" id="email" name="email" required>
-                
-                <button type="submit" class="buy-button">確認画面へ進む</button>
+                <input type="email" id="email" name="email" required placeholder="メールアドレスを入力してください">
+
+                <button type="submit">購入する</button>
             </form>
         </div>
     </div>
+
+    <!-- フッター -->
+    <footer>
+        <p class="copyright">© 2024 Vagency</p>
+    </footer>
 </body>
 </html>
