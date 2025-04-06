@@ -129,27 +129,41 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
 
-            const response = await fetch('https://kirinuki-ec-site.vercel.app/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    videoUrl: videoUrl,
-                    details: details,
-                    name: name,
-                    email: email,
-                }),
-            });
+            // 現在のホスト名に基づいてAPIエンドポイントを決定
+            const apiUrl = window.location.hostname === 'localhost' 
+                ? 'http://localhost:4242/create-checkout-session'
+                : '/api/create-checkout-session';
 
-            const session = await response.json();
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        videoUrl: videoUrl,
+                        details: details,
+                        name: name,
+                        email: email,
+                    }),
+                });
 
-            // Stripeのチェックアウトにリダイレクト
-            const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
-            const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
+                if (!response.ok) {
+                    throw new Error(`サーバーエラー: ${response.status}`);
+                }
 
-            if (error) {
-                alert(error.message);
+                const session = await response.json();
+
+                // Stripeのチェックアウトにリダイレクト
+                const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
+                const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
+
+                if (error) {
+                    alert(`決済画面の読み込みエラー: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('エラーが発生しました:', error);
+                alert(`エラーが発生しました: ${error.message}`);
             }
         });
     </script>
