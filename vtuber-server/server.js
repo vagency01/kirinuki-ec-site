@@ -5,8 +5,14 @@ const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBbl
 
 const app = express();
 
-// CORSを有効にする
-app.use(cors());
+// CORSを強化して設定
+const corsOptions = {
+  origin: 'https://kirinuki-ec-site.vercel.app', // このURLを許可する
+  methods: ['GET', 'POST'], // 許可するHTTPメソッド
+  allowedHeaders: ['Content-Type'], // 許可するヘッダー
+};
+
+app.use(cors(corsOptions)); // CORSを設定
 
 app.use(express.static('public'));
 app.use(express.json());
