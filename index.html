@@ -139,6 +139,35 @@
             width: auto;
             cursor: pointer;
         }
+
+        /* ご依頼の流れ セクション */
+        .flow {
+            text-align: center; /* 中央揃え */
+            margin-top: 50px;
+        }
+        .flow h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .flow img {
+            width: 100%; 
+            max-width: 1600px; /* 画像の最大幅を1600pxに制限 */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* 中央揃え */
+        }
+        .flow .request-button {
+            background-color: #FF9D00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -149,7 +178,7 @@
         </div>
         
         <!-- プラン一覧 -->
-        <div class="plans">
+        <div class="plans" id="plans">
             <div class="plan">
                 <img src="images/Plan1.jpg" alt="プラン1画像">
                 <h2>プラン1</h2>
@@ -202,7 +231,8 @@
         <!-- ご依頼の流れ -->
         <div class="flow">
             <h2>-ご依頼の流れ-</h2>
-            <img src="images/IrainoNagare.jpg" alt="ご依頼の流れ" style="width: 100%; max-width: 1600px; height: auto; display: block; margin: 0;">
+            <img src="images/IrainoNagare.jpg" alt="ご依頼の流れ">
+            <a href="#plans" class="request-button">ご依頼はコチラ</a>
         </div>
     </div>
 
