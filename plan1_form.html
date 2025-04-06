@@ -19,7 +19,7 @@
 
         .form-section {
             text-align: center;
-            margin-bottom: 20px; /* 画像とフォームの間隔を狭めました */
+            margin-bottom: 20px;
         }
 
         .form-section img {
@@ -32,7 +32,7 @@
         .purchase-form {
             background-color: #FFFFFF;
             padding: 30px;
-            margin-top: 10px; /* フォームの上部の間隔を狭めました */
+            margin-top: 10px;
             border-radius: 10px;
             width: 100%;
             max-width: 600px;
@@ -79,8 +79,9 @@
             position: relative;
             justify-content: center;
         }
-
     </style>
+    <!-- Stripe.jsのライブラリ読み込み -->
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <div class="container">
@@ -88,7 +89,7 @@
         <div class="form-section">
             <img src="images/Plan1.jpg" alt="プラン1画像">
         </div>
-        
+
         <!-- 購入フォーム -->
         <div class="purchase-form">
             <h2>プラン1 - 購入フォーム</h2>
@@ -109,11 +110,40 @@
                 <button type="submit">購入する</button>
             </form>
         </div>
+
+        <!-- プラン1決済ボタン -->
+        <button id="checkout-button-plan1">プラン1購入</button>
+
     </div>
 
     <!-- フッター -->
     <footer>
         <p class="copyright">© 2024 Vagency</p>
     </footer>
+
+    <script>
+      var stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW'); // 公開可能キー
+
+      // プラン1の決済
+      document.getElementById('checkout-button-plan1').addEventListener('click', function () {
+        fetch('/create-checkout-session', {
+          method: 'POST',
+        })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (sessionId) {
+          return stripe.redirectToCheckout({ sessionId: sessionId });
+        })
+        .then(function (result) {
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function (error) {
+          console.error('Error:', error);
+        });
+      });
+    </script>
 </body>
 </html>
