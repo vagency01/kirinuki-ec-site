@@ -1,11 +1,13 @@
 const express = require('express');
 const Stripe = require('stripe');
-const cors = require('cors');  // CORSのインポート
-
+const cors = require('cors'); // corsをインポート
 const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8'); // シークレットキー
 
 const app = express();
-app.use(cors());  // CORSを許可する
+
+// CORSを有効にする
+app.use(cors());
+
 app.use(express.static('public'));
 app.use(express.json());
 
@@ -118,7 +120,7 @@ app.get('/success.html', async (req, res) => {
 });
 
 // サーバーを指定ポートで起動
-const YOUR_DOMAIN = "https://kirinuki-ec-site.vercel.app"; // VercelのURLに変更
+const YOUR_DOMAIN = "https://kirinuki-ec-site.vercel.app"; // 本番のURLを使用
 app.listen(4242, () => {
   console.log('Server is running on http://localhost:4242');
 });
