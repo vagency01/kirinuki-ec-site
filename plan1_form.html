@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>プラン1 - VTuber切り抜きサービス</title>
+    <script src="https://js.stripe.com/v3/"></script>
     <style>
         body {
             font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
@@ -67,6 +68,7 @@
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
         }
 
         footer {
@@ -78,10 +80,7 @@
             position: relative;
             justify-content: center;
         }
-
     </style>
-    <!-- Stripe.jsのライブラリ読み込み -->
-    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <div class="container">
@@ -89,7 +88,7 @@
         <div class="form-section">
             <img src="images/Plan1.jpg" alt="プラン1画像">
         </div>
-
+        
         <!-- 購入フォーム -->
         <div class="purchase-form">
             <h2>プラン1 - 購入フォーム</h2>
@@ -110,7 +109,6 @@
                 <button type="submit">購入する</button>
             </form>
         </div>
-
     </div>
 
     <!-- フッター -->
@@ -119,39 +117,45 @@
     </footer>
 
     <script>
-      var stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW'); // 公開可能キー
+      // Stripe公開可能キー
+      const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
 
-      // 購入フォーム送信時に決済ページへ遷移
-      document.getElementById('purchase-form').addEventListener('submit', function (event) {
-        event.preventDefault(); // フォームのデフォルト動作を無効化
+      // 購入ボタンのクリックイベント
+      document.querySelector("button").addEventListener("click", function(e) {
+        e.preventDefault(); // ボタンがデフォルトで送信しないようにする
 
-        // ここで必要なデータをStripeに送信し、決済セッションを作成
-        fetch('/create-checkout-session', {
-          method: 'POST',
+        // 入力された情報を取得
+        const videoUrl = document.getElementById("video-url").value;
+        const details = document.getElementById("details").value;
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        // サーバーにチェックアウトセッションを作成するリクエストを送信
+        fetch("/create-checkout-session", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // フォームのデータを送信（必要に応じて）
-            videoUrl: document.getElementById('video-url').value,
-            details: document.getElementById('details').value,
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value
+            videoUrl: videoUrl,
+            details: details,
+            name: name,
+            email: email
           })
         })
-        .then(function (response) {
-          return response.json();
+        .then((response) => response.json())
+        .then((session) => {
+          // Stripeの決済画面に遷移
+          return stripe.redirectToCheckout({ sessionId: session.sessionId });
         })
-        .then(function (sessionId) {
-          return stripe.redirectToCheckout({ sessionId: sessionId });
-        })
-        .then(function (result) {
+        .then((result) => {
+          // エラーハンドリング
           if (result.error) {
             alert(result.error.message);
           }
         })
-        .catch(function (error) {
-          console.error('Error:', error);
+        .catch((error) => {
+          console.error("Error:", error);
         });
       });
     </script>
