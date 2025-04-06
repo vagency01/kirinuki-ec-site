@@ -30,42 +30,80 @@
             display: block; /* 上下の余白をなくすため */
             margin: 0;
         }
-
-        footer {
+        .plans {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px;
+        }
+        .plan {
+            background-color: #FFFFFF;
+            width: 30%;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .plan img {
+            width: 100%; /* プラン画像を1:1で調整 */
+            height: auto;
+            display: block; /* 上下の余白をなくすため */
+            margin: 0; /* 余白を完全に削除 */
+        }
+        .buy-button {
+            background-color: #FFFFFF;
+            color: #333;
+            border: 2px solid #FF9D00;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .video-samples {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .video-samples h2 {
+            margin-bottom: 30px;
+        }
+        .videos {
+            display: flex;
+            justify-content: space-between;
+        }
+        .video {
+            width: 30%;
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .purchase-form {
+            background-color: #FFFFFF;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px;
+        }
+        .purchase-form h2 {
+            color: #FF9D00;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .purchase-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .purchase-form input, .purchase-form textarea {
             width: 100%;
-            background-color: #FFA500; /* オレンジの背景 */
-            padding: 40px 20px;
-            text-align: center;
-            color: #555;
-            position: relative;
-            justify-content: center; /* 中央揃え */
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #FF9D00;
+            border-radius: 5px;
         }
-
-        .footer-content {
-            max-width: 1200px; /* 中身の最大幅を1200pxに制限 */
-            margin: 0 auto; /* 中央揃え */
-            text-align: center;
-        }
-
-        .footer-content h2,
-        .footer-content .description {
-            color: white; /* フォント色 */
-        }
-
-        .copyright {
-            margin-top: 20px; /* 余白を追加 */
-        }
-
-        .logo {
-            width: 70vw;
-            height: calc(70vw * 0.6);
-            max-height: calc(400px * 0.6);
-            max-width: 400px;
-            background-position: center;
-            background-size: cover;
-            margin: auto;
-            margin-top: 0px;
-            background-image: url('images/Vage_Logo.png');
+        .purchase-form button {
+            background-color: #FF9D00;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -122,4 +160,10 @@
                 
                 <div class="video">
                     <h3>動画サンプル③</h3>
-                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media;
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
