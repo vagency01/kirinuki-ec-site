@@ -23,9 +23,10 @@
             margin-bottom: 30px;
             border-radius: 10px;
         }
-        .banner h1 {
-            color: #FF9D00;
-            font-size: 2.5em;
+        .banner img {
+            width: 100%; /* バナー画像がレスポンシブに対応するように */
+            max-width: 1600px;
+            height: auto;
         }
         .plans {
             display: flex;
@@ -39,8 +40,9 @@
             text-align: center;
             border-radius: 10px;
         }
-        .plan h2 {
-            color: #FF9D00;
+        .plan img {
+            width: 100%; /* プラン画像を1:1で調整 */
+            height: auto;
         }
         .buy-button {
             background-color: #FFFFFF;
@@ -105,13 +107,14 @@
     <div class="container">
         <!-- バナー画像 -->
         <div class="banner">
-            <h1>VTuber切り抜きサービス</h1>
+            <img src="images/Kari_banner.jpg" alt="バナー画像">
         </div>
         
         <!-- プラン一覧 -->
         <div class="plans">
             <div class="plan">
-                <h2>プラン1画像</h2>
+                <img src="images/Plan1.jpg" alt="プラン1画像">
+                <h2>プラン1</h2>
                 <p>説明文がここに入りますよ</p>
                 <a href="plan1_form.html">
                     <button class="buy-button">プラン1購入</button>
@@ -119,7 +122,8 @@
             </div>
             
             <div class="plan">
-                <h2>プラン2画像</h2>
+                <img src="images/Plan2.jpg" alt="プラン2画像">
+                <h2>プラン2</h2>
                 <p>説明文がここに入ります</p>
                 <a href="plan2_form.html">
                     <button class="buy-button">プラン2購入</button>
@@ -127,7 +131,8 @@
             </div>
             
             <div class="plan">
-                <h2>プラン3画像</h2>
+                <img src="images/Plan3.jpg" alt="プラン3画像">
+                <h2>プラン3</h2>
                 <p>説明文がここに入ります</p>
                 <a href="plan3_form.html">
                     <button class="buy-button">プラン3購入</button>
