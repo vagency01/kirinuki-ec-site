@@ -1,6 +1,6 @@
 const express = require('express');
 const Stripe = require('stripe');
-const cors = require('cors'); // CORSモジュールをインポート
+const cors = require('cors'); // CORSモジュールのインポート
 
 const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8'); // シークレットキー
 
