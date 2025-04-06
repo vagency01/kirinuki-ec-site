@@ -1,9 +1,31 @@
 // /api/create-checkout-session.js
 
 const Stripe = require('stripe');
-const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8'); // シークレットキー
+const cors = require('cors');
+const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
+
+// CORSミドルウェアをセットアップ
+const corsHandler = cors({
+  origin: ['https://kirinuki-ec-site.vercel.app', 'http://localhost:3000'],
+  methods: ['POST', 'GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+});
 
 module.exports = async (req, res) => {
+  // CORSヘッダーを適用
+  await new Promise((resolve, reject) => {
+    corsHandler(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method === 'POST') {
     const { videoUrl, details, name, email } = req.body;
 
@@ -18,18 +40,19 @@ module.exports = async (req, res) => {
                 name: 'プラン1 - VTuber切り抜きサービス',
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: 1000, // 価格（単位は最小通貨単位）
+              unit_amount: 1000,
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.YOUR_DOMAIN}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.YOUR_DOMAIN}/cancel.html`,
+        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/cancel.html`,
         metadata: {
           video_url: videoUrl,
           name: name,
           email: email,
+          details: details,
         },
       });
 
