@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プラン3 - フォーム入力</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+            background-color: #FFF8EF;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .purchase-form {
+            background-color: #FFFFFF;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 10px;
+        }
+        .purchase-form h2 {
+            color: #FF9D00;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .purchase-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .purchase-form input, .purchase-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #FF9D00;
+            border-radius: 5px;
+        }
+        .purchase-form button {
+            background-color: #FF9D00;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 購入フォーム -->
+        <div class="purchase-form">
+            <h2>プラン3: 切り抜きフォーム</h2>
+            <form action="#" method="POST">
+                <label for="video-url">切り抜き元のURL:</label>
+                <input type="url" id="video-url" name="video-url" required>
+                
+                <label for="details">希望詳細:</label>
+                <textarea id="details" name="details" rows="4" required></textarea>
+                
+                <label for="name">名前:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">メールアドレス:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <button type="submit" class="buy-button">確認画面へ進む</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
