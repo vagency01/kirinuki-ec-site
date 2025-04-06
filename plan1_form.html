@@ -92,7 +92,7 @@
         <!-- 購入フォーム -->
         <div class="purchase-form">
             <h2>プラン1 - 購入フォーム</h2>
-            <form action="#" method="POST">
+            <form id="checkout-form">
                 <label for="video-url">切り抜き元のURL:</label>
                 <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
 ※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
@@ -117,38 +117,36 @@
     </footer>
 
     <script>
-        document.querySelector('form').addEventListener('submit', async (e) => {
-            e.preventDefault(); // フォームのデフォルトの送信を防ぐ
+        // フォーム送信時にStripeチェックアウトセッションを作成
+        document.getElementById('checkout-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-            const formData = new FormData(e.target);
-            const data = {
-                videoUrl: formData.get('video-url'),
-                details: formData.get('details'),
-                name: formData.get('name'),
-                email: formData.get('email'),
-            };
+            const videoUrl = document.getElementById('video-url').value;
+            const details = document.getElementById('details').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
 
-            try {
-                // ローカルサーバーにPOSTリクエストを送信
-                const response = await fetch("http://localhost:4242/create-checkout-session", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data),
-                });
+            const response = await fetch('http://localhost:4242/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    videoUrl: videoUrl,
+                    details: details,
+                    name: name,
+                    email: email,
+                }),
+            });
 
-                const result = await response.json();
-                if (result.sessionId) {
-                    // Stripe Checkoutセッションの開始
-                    const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
-                    stripe.redirectToCheckout({ sessionId: result.sessionId });
-                } else {
-                    alert("エラーが発生しました。もう一度試してください。");
-                }
-            } catch (error) {
-                console.error("エラー:", error);
-                alert("通信エラーが発生しました。再試行してください。");
+            const session = await response.json();
+
+            // Stripeのチェックアウトにリダイレクト
+            const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
+            const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
+
+            if (error) {
+                alert(error.message);
             }
         });
     </script>
