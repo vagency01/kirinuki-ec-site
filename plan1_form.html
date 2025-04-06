@@ -32,7 +32,7 @@
         .purchase-form {
             background-color: #FFFFFF;
             padding: 30px;
-            margin-top: 10px; /* フォームの上部の間隔を狭めました */
+            margin-top: 10px;
             border-radius: 10px;
             width: 100%;
             max-width: 600px;
@@ -67,7 +67,6 @@
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
         }
 
         footer {
@@ -94,7 +93,7 @@
         <!-- 購入フォーム -->
         <div class="purchase-form">
             <h2>プラン1 - 購入フォーム</h2>
-            <form action="#" method="POST">
+            <form id="purchase-form" action="#" method="POST">
                 <label for="video-url">切り抜き元のURL:</label>
                 <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
 ※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
@@ -112,9 +111,6 @@
             </form>
         </div>
 
-        <!-- プラン1決済ボタン -->
-        <button id="checkout-button-plan1">プラン1購入</button>
-
     </div>
 
     <!-- フッター -->
@@ -125,10 +121,23 @@
     <script>
       var stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW'); // 公開可能キー
 
-      // プラン1の決済
-      document.getElementById('checkout-button-plan1').addEventListener('click', function () {
+      // 購入フォーム送信時に決済ページへ遷移
+      document.getElementById('purchase-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // フォームのデフォルト動作を無効化
+
+        // ここで必要なデータをStripeに送信し、決済セッションを作成
         fetch('/create-checkout-session', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            // フォームのデータを送信（必要に応じて）
+            videoUrl: document.getElementById('video-url').value,
+            details: document.getElementById('details').value,
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value
+          })
         })
         .then(function (response) {
           return response.json();
