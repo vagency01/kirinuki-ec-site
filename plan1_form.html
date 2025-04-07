@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プラン1 - VTuber切り抜きサービス</title>
+    <title>きほんプラン - VTuber切り抜きサービス</title>
     <style>
         body {
             font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
@@ -16,19 +16,16 @@
             margin: 0 auto;
             padding: 20px;
         }
-
         .form-section {
             text-align: center;
             margin-bottom: 20px;
         }
-
         .form-section img {
             width: 100%;
-            max-width: 200px; /* プラン画像のサイズを6分の1に調整 */
+            max-width: 200px;
             height: auto;
             margin-bottom: 20px;
         }
-
         .purchase-form {
             background-color: #FFFFFF;
             padding: 30px;
@@ -39,18 +36,15 @@
             margin-left: auto;
             margin-right: auto;
         }
-
         .purchase-form h2 {
             color: #FF9D00;
             font-size: 2em;
             margin-bottom: 20px;
         }
-
         .purchase-form label {
             display: block;
             margin: 10px 0 5px;
         }
-
         .purchase-form input, .purchase-form textarea {
             width: 100%;
             padding: 10px;
@@ -58,7 +52,6 @@
             border: 2px solid #FF9D00;
             border-radius: 5px;
         }
-
         .purchase-form button {
             background-color: #FF9D00;
             color: white;
@@ -69,29 +62,25 @@
             text-decoration: none;
             display: inline-block;
         }
-
         footer {
             width: 100%;
             background-color: #FFA500;
-            padding: 5px 5px;
+            padding: 5px;
             text-align: center;
             color: #555;
             position: relative;
             justify-content: center;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- プラン1画像 -->
         <div class="form-section">
-            <img src="images/Plan1.jpg" alt="プラン1画像">
+            <img src="images/Plan1.jpg" alt="きほんプラン画像">
         </div>
-        
-        <!-- 購入フォーム -->
         <div class="purchase-form">
-            <h2>プラン1 - 購入フォーム</h2>
+            <h2>きほんプラン - 購入フォーム</h2>
+            <p><strong>価格:</strong> ¥3,000</p>
             <form id="checkout-form">
                 <label for="video-url">切り抜き元のURL:</label>
                 <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
@@ -110,17 +99,12 @@
             </form>
         </div>
     </div>
-
-    <!-- フッター -->
     <footer>
         <p class="copyright">© 2024 Vagency</p>
     </footer>
 
-    <!-- StripeのJavaScriptライブラリを読み込む -->
     <script src="https://js.stripe.com/v3/"></script>
-
     <script>
-        // フォーム送信時にStripeチェックアウトセッションを作成
         document.getElementById('checkout-form').addEventListener('submit', async (event) => {
             event.preventDefault();
 
@@ -129,7 +113,6 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
 
-            // 現在のホスト名に基づいてAPIエンドポイントを決定
             const apiUrl = window.location.hostname === 'localhost' 
                 ? 'http://localhost:4242/create-checkout-session'
                 : '/api/create-checkout-session';
@@ -137,15 +120,8 @@
             try {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        videoUrl: videoUrl,
-                        details: details,
-                        name: name,
-                        email: email,
-                    }),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ videoUrl, details, name, email, plan: 'きほんプラン', amount: 3000 }),
                 });
 
                 if (!response.ok) {
@@ -153,8 +129,6 @@
                 }
 
                 const session = await response.json();
-
-                // Stripeのチェックアウトにリダイレクト
                 const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
                 const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
 
