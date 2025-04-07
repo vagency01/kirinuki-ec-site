@@ -1,25 +1,27 @@
+// /api/session-details.js
+
 const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
 
-export default async function handler(req, res) {
-  const { session_id } = req.query;
-
-  if (!session_id) {
-    return res.status(400).json({ error: 'Session ID is required' });
+module.exports = async (req, res) => {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  try {
-    const session = await stripe.checkout.sessions.retrieve(session_id);
-    const lineItems = await stripe.checkout.sessions.listLineItems(session_id, { limit: 1 });
+  const { session_id } = req.query;
 
-    const productName = lineItems.data[0]?.description || '不明';
-    const price = (lineItems.data[0]?.price?.unit_amount || 0) / 100;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      expand: ['line_items.data.price.product'],
+    });
 
     const metadata = session.metadata || {};
+    const lineItem = session.line_items.data[0];
+    const productData = lineItem?.price?.product;
 
     res.status(200).json({
-      planName: productName,
-      price: price,
+      planName: productData?.name || '不明',
+      price: lineItem?.price?.unit_amount ? (lineItem.price.unit_amount / 100) : '不明',
       videoUrl: metadata.video_url || '不明',
       details: metadata.details || '不明',
       email: metadata.email || '不明',
@@ -29,4 +31,4 @@ export default async function handler(req, res) {
     console.error('Error retrieving session details:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
