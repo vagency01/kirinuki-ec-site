@@ -12,7 +12,6 @@ const corsHandler = cors({
 });
 
 module.exports = async (req, res) => {
-  // CORSヘッダーを適用
   await new Promise((resolve, reject) => {
     corsHandler(req, res, (result) => {
       if (result instanceof Error) {
@@ -35,13 +34,13 @@ module.exports = async (req, res) => {
     // プランの判定（URLで判別）
     const referer = req.headers.referer || '';
     if (referer.includes('plan1_form.html')) {
-      planName = 'プラン1 - VTuber切り抜きサービス';
+      planName = 'きほんプラン';
       unitAmount = 3000;
     } else if (referer.includes('plan2_form.html')) {
-      planName = 'プラン2 - VTuber切り抜きサービス';
+      planName = 'おんぶにだっこプラン';
       unitAmount = 4000;
     } else if (referer.includes('plan3_form.html')) {
-      planName = 'プラン3 - VTuber切り抜きサービス';
+      planName = 'ゆるイラスト切り抜き';
       unitAmount = 8000;
     } else {
       planName = '不明なプラン';
@@ -59,7 +58,7 @@ module.exports = async (req, res) => {
                 name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: unitAmount,
+              unit_amount: unitAmount * 100, // Stripeは最小単位（円なら「円 × 100」）
             },
             quantity: 1,
           },
@@ -68,6 +67,8 @@ module.exports = async (req, res) => {
         success_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/cancel.html`,
         metadata: {
+          planName: planName,
+          price: unitAmount,
           video_url: videoUrl,
           name: name,
           email: email,
