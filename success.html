@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ご購入ありがとうございます！</title>
+  <title>決済成功</title>
   <style>
     body {
       font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
@@ -12,67 +12,45 @@
       padding: 0;
       text-align: center;
     }
-    .header-bar {
-      width: 100%;
-      height: 20px;
-      background-color: #FFA500;
-    }
     .container {
       max-width: 600px;
-      margin: 30px auto;
-      background-color: #FFFFFF;
-      padding: 30px;
-      border-radius: 10px;
+      margin: 0 auto;
+      padding: 20px;
     }
-    h1 {
-      color: #FF9D00;
-      margin-bottom: 20px;
-    }
-    .details {
-      text-align: left;
-      margin-top: 20px;
-    }
-    .details p {
-      margin: 8px 0;
-    }
-    .back-button {
+    .success-message {
       background-color: #FF9D00;
       color: white;
-      padding: 10px 30px;
-      border: none;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 20px;
-      text-decoration: none;
-      display: inline-block;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
     }
-    footer {
-      width: 100%;
-      background-color: #FFA500;
-      padding: 5px 5px;
-      text-align: center;
+    .btn {
+      background-color: #FF9D00;
       color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn:hover {
+      background-color: #FF7F00;
     }
   </style>
 </head>
 <body>
-  <div class="header-bar"></div>
-
   <div class="container">
-    <h1>ご購入ありがとうございます！</h1>
-    <p>ご入力いただいた内容を確認しました。</p>
+    <h1>購入が完了しました！</h1>
+    <p class="success-message">下記の内容で制作いたします。(納品予定1〜2週間以内)</p>
 
-    <div class="details" id="session-details">
-      <p>読み込み中...</p>
-    </div>
+    <p><strong>購入プラン名:</strong> <span id="plan-name">読み込み中...</span></p>
+    <p><strong>値段:</strong> <span id="price">読み込み中...</span></p>
+    <p><strong>切り抜き元のURL:</strong> <span id="video-url">読み込み中...</span></p>
+    <p><strong>希望詳細:</strong> <span id="details">読み込み中...</span></p>
+    <p><strong>完成しましたら:</strong> <span id="email">読み込み中...</span> にお送りいたします。</p>
+    <p><strong>注文番号:</strong> <span id="order-id">読み込み中...</span></p>
 
-    <a href="index.html" class="back-button">トップに戻る</a>
+    <a href="index.html" class="btn">ホームへ戻る</a>
   </div>
-
-  <footer>
-    © 2024 Vagency
-  </footer>
 
   <script>
     async function fetchSessionDetails() {
@@ -80,29 +58,27 @@
       const sessionId = params.get('session_id');
 
       if (!sessionId) {
-        document.getElementById('session-details').innerHTML = '<p>セッションIDが見つかりません。</p>';
+        alert('セッションIDが見つかりません。');
         return;
       }
 
       try {
-        const response = await fetch(`/api/session-details.js?session_id=${sessionId}`);
-        const data = await response.json();
-
-        if (data.error) {
-          document.getElementById('session-details').innerHTML = `<p>${data.error}</p>`;
-          return;
+        const response = await fetch(`/api/session-details?session_id=${sessionId}`);
+        if (!response.ok) {
+          throw new Error(`サーバーエラー: ${response.status}`);
         }
 
-        document.getElementById('session-details').innerHTML = `
-          <p><strong>プラン名:</strong> ${data.plan_name}</p>
-          <p><strong>価格:</strong> ¥${data.price}</p>
-          <p><strong>切り抜き元のURL:</strong> ${data.video_url}</p>
-          <p><strong>希望詳細:</strong> ${data.details}</p>
-          <p><strong>メールアドレス:</strong> ${data.email}</p>
-        `;
+        const data = await response.json();
+
+        document.getElementById('plan-name').textContent = data.planName || '不明';
+        document.getElementById('price').textContent = `¥${data.price || '不明'}`;
+        document.getElementById('video-url').textContent = data.videoUrl || '不明';
+        document.getElementById('details').textContent = data.details || '不明';
+        document.getElementById('email').textContent = data.email || '不明';
+        document.getElementById('order-id').textContent = data.orderId || '不明';
       } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('session-details').innerHTML = '<p>情報の取得に失敗しました。</p>';
+        console.error('エラーが発生しました:', error);
+        alert('情報の取得中にエラーが発生しました。');
       }
     }
 
