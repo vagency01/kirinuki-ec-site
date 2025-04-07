@@ -24,6 +24,16 @@
       padding: 30px;
       border-radius: 10px;
     }
+    .form-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-section img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+    }
     h1 {
       color: #FF9D00;
       margin-bottom: 20px;
@@ -44,6 +54,7 @@
       margin-top: 5px;
       border: 2px solid #FF9D00;
       border-radius: 5px;
+      resize: vertical;
     }
     button {
       background-color: #FF9D00;
@@ -68,52 +79,73 @@
   <div class="header-bar"></div>
 
   <div class="container">
+    <div class="form-section">
+      <img src="images/Plan2.jpg" alt="おんぶにだっこプラン画像" />
+    </div>
+
     <h1>おんぶにだっこプラン - 入力フォーム</h1>
-    <form id="payment-form">
-      <label for="videoUrl">切り抜き元の動画URL</label>
-      <input type="url" id="videoUrl" name="videoUrl" placeholder="例: https://www.youtube.com/watch?v=xxxx" required />
+    <form id="checkout-form">
+      <label for="video-url">切り抜き元のURL:</label>
+      <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
+※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
 
-      <label for="details">希望詳細</label>
-      <textarea id="details" name="details" rows="4" placeholder="カットしてほしい範囲など" required></textarea>
+      <label for="details">希望詳細:</label>
+      <textarea id="details" name="details" rows="4" required placeholder="例:明るいイメージでおまかせします！"></textarea>
 
-      <label for="name">お名前（連絡用）</label>
-      <input type="text" id="name" name="name" placeholder="例: 山田太郎" required />
+      <label for="name">名前:</label>
+      <input type="text" id="name" name="name" required placeholder="お名前を入力してください" />
 
-      <label for="email">メールアドレス</label>
-      <input type="email" id="email" name="email" placeholder="例: example@example.com" required />
+      <label for="email">メールアドレス:</label>
+      <input type="email" id="email" name="email" required placeholder="メールアドレスを入力してください" />
 
       <button type="submit">支払いへ進む</button>
     </form>
   </div>
 
   <footer>
-    © 2024 Vagency
+    <p class="copyright">© 2024 Vagency</p>
   </footer>
 
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const form = document.getElementById('payment-form');
-    form.addEventListener('submit', async (event) => {
+    document.getElementById('checkout-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+
+      const videoUrl = document.getElementById('video-url').value;
+      const details = document.getElementById('details').value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+
+      const apiUrl = window.location.hostname === 'localhost'
+        ? 'http://localhost:4242/create-checkout-session'
+        : '/api/create-checkout-session';
 
       try {
-        const response = await fetch('/api/create-checkout-session', {
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            videoUrl: videoUrl,
+            details: details,
+            name: name,
+            email: email,
+          }),
         });
 
-        const session = await response.json();
+        if (!response.ok) {
+          throw new Error(`サーバーエラー: ${response.status}`);
+        }
 
-        if (session.sessionId) {
-          window.location.href = `https://checkout.stripe.com/pay/${session.sessionId}`;
-        } else {
-          alert('セッションIDが取得できませんでした。');
+        const session = await response.json();
+        const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
+        const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
+
+        if (error) {
+          alert(`決済画面の読み込みエラー: ${error.message}`);
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('エラーが発生しました。時間を置いて再度お試しください。');
+        console.error('エラーが発生しました:', error);
+        alert(`エラーが発生しました: ${error.message}`);
       }
     });
   </script>
