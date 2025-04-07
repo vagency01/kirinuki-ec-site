@@ -2,17 +2,16 @@
 
 const Stripe = require('stripe');
 const cors = require('cors');
-const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY); // 環境変数から取得
 
 // CORSミドルウェアをセットアップ
 const corsHandler = cors({
-  origin: ['https://kirinuki-ec-site.vercel.app', 'http://localhost:3000'],
+  origin: ['https://vkirinukiproject.vercel.app', 'http://localhost:3000'],
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 });
 
 module.exports = async (req, res) => {
-  // CORSヘッダーを適用
   await new Promise((resolve, reject) => {
     corsHandler(req, res, (result) => {
       if (result instanceof Error) {
@@ -29,6 +28,21 @@ module.exports = async (req, res) => {
   if (req.method === 'POST') {
     const { videoUrl, details, name, email } = req.body;
 
+    // プラン判定
+    let planName = '';
+    let amount = 0;
+
+    if (details.includes('イラスト')) {
+      planName = 'ゆるイラスト切り抜き';
+      amount = 8000;
+    } else if (details.includes('リンクを送るだけ')) {
+      planName = 'おんぶにだっこプラン';
+      amount = 4000;
+    } else {
+      planName = 'きほんプラン';
+      amount = 3000;
+    }
+
     try {
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -37,22 +51,24 @@ module.exports = async (req, res) => {
             price_data: {
               currency: 'jpy',
               product_data: {
-                name: 'プラン1 - VTuber切り抜きサービス',
+                name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: 1000,
+              unit_amount: amount * 100, // 円を最小単位に
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/api/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/cancel.html`,
+        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/cancel.html`,
         metadata: {
           video_url: videoUrl,
           name: name,
           email: email,
           details: details,
+          plan: planName,
+          amount: amount,
         },
       });
 
