@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     const metadata = session.metadata || {};
 
     const planName = session.line_items?.data?.[0]?.price?.product?.name || '不明';
-    const amount = session.amount_total ? session.amount_total / 100 : '不明';
+    const amount = session.amount_total ? session.amount_total : '不明'; // ← ここ修正済み
 
     res.status(200).json({
       planName: metadata.planName || planName,
