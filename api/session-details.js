@@ -1,48 +1,39 @@
+// /api/session-details.js
+
 const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
 
 module.exports = async (req, res) => {
-  const sessionId = req.query.session_id;
+  const { session_id } = req.query;
 
-  if (!sessionId) {
-    return res.status(400).json({ error: 'セッションIDが必要です。' });
+  if (!session_id) {
+    return res.status(400).json({ error: 'Session ID is required' });
   }
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-    const metadata = session.metadata || {};
+    const session = await stripe.checkout.sessions.retrieve(session_id);
 
-    let planName = '';
-    let price = '';
+    // プランごとに情報をマッピング
+    const planInfo = {
+      'プラン1 - VTuber切り抜きサービス': { planName: 'きほんプラン', price: 3000 },
+      'プラン2 - VTuber切り抜きサービス': { planName: 'おんぶにだっこプラン', price: 4000 },
+      'プラン3 - VTuber切り抜きサービス': { planName: 'ゆるイラスト切り抜き', price: 8000 },
+    };
 
-    // 単価からプランを判別
-    switch (session.amount_total) {
-      case 3000 * 100:
-        planName = 'きほんプラン';
-        price = '3,000';
-        break;
-      case 4000 * 100:
-        planName = 'おんぶにだっこプラン';
-        price = '4,000';
-        break;
-      case 8000 * 100:
-        planName = 'ゆるイラスト切り抜き';
-        price = '8,000';
-        break;
-      default:
-        planName = '不明';
-        price = '不明';
-    }
+    const productDescription = session?.display_items?.[0]?.custom?.name || session?.line_items?.data?.[0]?.price?.product_data?.name || '';
+
+    const selectedPlan = planInfo[productDescription] || { planName: '不明', price: '不明' };
 
     res.status(200).json({
-      plan_name: planName,
-      price: price,
-      video_url: metadata.video_url || '不明',
-      details: metadata.details || '不明',
-      email: metadata.email || '不明',
+      planName: selectedPlan.planName,
+      price: selectedPlan.price,
+      videoUrl: session.metadata.video_url || '不明',
+      details: session.metadata.details || '不明',
+      email: session.metadata.email || '不明',
+      orderId: session.id || '不明',
     });
   } catch (error) {
-    console.error('Error fetching session details:', error);
-    res.status(500).json({ error: 'セッション情報の取得に失敗しました。' });
+    console.error('Error retrieving session details:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
