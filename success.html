@@ -24,6 +24,11 @@
       border-radius: 10px;
       margin: 20px 0;
     }
+    .attention {
+      font-weight: bold;
+      color: #FF0000;
+      margin-bottom: 20px;
+    }
     .btn {
       background-color: #FF9D00;
       color: white;
@@ -42,11 +47,14 @@
     <h1>購入が完了しました！</h1>
     <p class="success-message">下記の内容で制作いたします。(納品予定1〜2週間以内)</p>
 
+    <p class="attention">お問い合わせ時に必要です。「購入内容」と「注文番号」を必ずメモまたはスクリーンショットで保存してください。</p>
+
     <p><strong>購入プラン名:</strong> <span id="plan-name">読み込み中...</span></p>
     <p><strong>値段:</strong> <span id="price">読み込み中...</span></p>
     <p><strong>切り抜き元のURL:</strong> <span id="video-url">読み込み中...</span></p>
     <p><strong>希望詳細:</strong> <span id="details">読み込み中...</span></p>
     <p><strong>完成しましたら:</strong> <span id="email">読み込み中...</span> にお送りいたします。</p>
+    <p><strong>ご依頼者名:</strong> <span id="customer-name">読み込み中...</span> 様</p>
     <p><strong>注文番号:</strong> <span id="order-id">読み込み中...</span></p>
 
     <a href="index.html" class="btn">ホームへ戻る</a>
@@ -69,13 +77,13 @@
         }
 
         const data = await response.json();
-
-        document.getElementById('plan-name').textContent = data.planName || '不明';
-        document.getElementById('price').textContent = `¥${data.price || '不明'}`;
-        document.getElementById('video-url').textContent = data.videoUrl || '不明';
-        document.getElementById('details').textContent = data.details || '不明';
-        document.getElementById('email').textContent = data.email || '不明';
-        document.getElementById('order-id').textContent = data.orderId || '不明';
+        document.getElementById('plan-name').textContent = data.planName;
+        document.getElementById('price').textContent = `¥${data.price}`;
+        document.getElementById('video-url').textContent = data.videoUrl;
+        document.getElementById('details').textContent = data.details;
+        document.getElementById('email').textContent = data.email;
+        document.getElementById('customer-name').textContent = data.customerName;
+        document.getElementById('order-id').textContent = data.orderId;
       } catch (error) {
         console.error('エラーが発生しました:', error);
         alert('情報の取得中にエラーが発生しました。');
