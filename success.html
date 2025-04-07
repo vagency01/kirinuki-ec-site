@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>決済成功</title>
+  <title>購入完了 - VTuber切り抜きサービス</title>
   <style>
     body {
       font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
@@ -14,70 +14,78 @@
     }
     .container {
       max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .success-message {
-      background-color: #FF9D00;
-      color: white;
-      padding: 20px;
+      margin: 50px auto;
+      background-color: #FFFFFF;
+      padding: 30px;
       border-radius: 10px;
-      margin: 20px 0;
     }
-    .btn {
+    h1 {
+      color: #000;
+      margin-bottom: 20px;
+    }
+    .notice {
+      background-color: #FFA500;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    p {
+      margin: 10px 0;
+    }
+    .button {
       background-color: #FF9D00;
       color: white;
-      padding: 10px 20px;
+      padding: 10px 30px;
+      border: none;
       border-radius: 20px;
-      text-decoration: none;
       font-weight: bold;
-    }
-    .btn:hover {
-      background-color: #FF7F00;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>購入が完了しました！</h1>
-    <p class="success-message">下記の内容で制作いたします。(納品予定1〜2週間以内)</p>
-
-    <p><strong>購入プラン名:</strong> <span id="plan-name">読み込み中...</span></p>
-    <p><strong>値段:</strong> <span id="price">読み込み中...</span></p>
-    <p><strong>切り抜き元のURL:</strong> <span id="video-url">読み込み中...</span></p>
-    <p><strong>希望詳細:</strong> <span id="details">読み込み中...</span></p>
-    <p><strong>完成しましたら:</strong> <span id="email">読み込み中...</span> にお送りいたします。</p>
-    <p><strong>注文番号:</strong> <span id="order-id">読み込み中...</span></p>
-
-    <a href="index.html" class="btn">ホームへ戻る</a>
+    <div class="notice">
+      下記の内容で制作いたします。(納品予定1〜2週間以内)
+    </div>
+    <p><strong>購入プラン名:</strong> <span id="plan-name"></span></p>
+    <p><strong>値段:</strong> ¥<span id="plan-price"></span></p>
+    <p><strong>切り抜き元のURL:</strong> <span id="video-url"></span></p>
+    <p><strong>希望詳細:</strong> <span id="details"></span></p>
+    <p><strong>完成しましたら:</strong> <span id="email"></span> にお送りいたします。</p>
+    <p><strong>注文番号:</strong> <span id="session-id"></span></p>
+    <a href="index.html" class="button">ホームへ戻る</a>
   </div>
 
   <script>
     async function fetchSessionDetails() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
-
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
       if (!sessionId) {
-        alert('セッションIDが見つかりません。');
+        alert('セッションIDが見つかりませんでした。');
         return;
       }
 
+      document.getElementById('session-id').textContent = sessionId;
+
       try {
         const response = await fetch(`/api/session-details?session_id=${sessionId}`);
-        if (!response.ok) {
-          throw new Error(`サーバーエラー: ${response.status}`);
-        }
+        const session = await response.json();
 
-        const data = await response.json();
-        document.getElementById('plan-name').textContent = data.planName;
-        document.getElementById('price').textContent = `¥${data.price}`;
-        document.getElementById('video-url').textContent = data.videoUrl;
-        document.getElementById('details').textContent = data.details;
-        document.getElementById('email').textContent = data.email;
-        document.getElementById('order-id').textContent = data.orderId;
+        document.getElementById('plan-name').textContent = session.plan_name || '不明';
+        document.getElementById('plan-price').textContent = session.price || '不明';
+        document.getElementById('video-url').textContent = session.video_url || '不明';
+        document.getElementById('details').textContent = session.details || '不明';
+        document.getElementById('email').textContent = session.email || '不明';
       } catch (error) {
         console.error('エラーが発生しました:', error);
-        alert('情報の取得中にエラーが発生しました。');
+        alert('セッション情報の取得でエラーが発生しました。');
       }
     }
 
