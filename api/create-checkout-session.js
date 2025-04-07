@@ -1,10 +1,12 @@
+// /api/create-checkout-session.js
+
 const Stripe = require('stripe');
 const cors = require('cors');
 const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
 
 // CORSミドルウェアをセットアップ
 const corsHandler = cors({
-  origin: ['https://kirinuki-ec-site.vercel.app', 'http://localhost:3000'],
+  origin: ['https://vkirinukiproject.vercel.app', 'http://localhost:3000'],
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 });
@@ -25,7 +27,26 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { videoUrl, details, name, email, planName, price } = req.body;
+    const { videoUrl, details, name, email } = req.body;
+
+    let planName = '';
+    let unitAmount = 0;
+
+    // プランの判定（URLで判別）
+    const referer = req.headers.referer || '';
+    if (referer.includes('plan1_form.html')) {
+      planName = 'プラン1 - VTuber切り抜きサービス';
+      unitAmount = 3000;
+    } else if (referer.includes('plan2_form.html')) {
+      planName = 'プラン2 - VTuber切り抜きサービス';
+      unitAmount = 4000;
+    } else if (referer.includes('plan3_form.html')) {
+      planName = 'プラン3 - VTuber切り抜きサービス';
+      unitAmount = 8000;
+    } else {
+      planName = '不明なプラン';
+      unitAmount = 0;
+    }
 
     try {
       const session = await stripe.checkout.sessions.create({
@@ -35,33 +56,31 @@ module.exports = async (req, res) => {
             price_data: {
               currency: 'jpy',
               product_data: {
-                name: `${planName} - VTuber切り抜きサービス`,
+                name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: parseInt(price),
+              unit_amount: unitAmount,
             },
             quantity: 1,
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/cancel.html`,
+        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/cancel.html`,
         metadata: {
           video_url: videoUrl,
           name: name,
           email: email,
           details: details,
-          plan_name: planName,
-          price: price
         },
       });
 
       res.status(200).json({ sessionId: session.id });
     } catch (error) {
       console.error('Error creating checkout session:', error);
-      res.status(500).send('Internal Server Error');
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   } else {
-    res.status(405).send('Method Not Allowed');
+    res.status(405).json({ error: 'Method Not Allowed' });
   }
 };
