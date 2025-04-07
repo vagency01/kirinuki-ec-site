@@ -1,5 +1,3 @@
-// /api/create-checkout-session.js
-
 const Stripe = require('stripe');
 const cors = require('cors');
 const stripe = Stripe('sk_test_51RAZVXBRsJ5pZ7020fQL54uhRXU3YW5tOy9R65UtFmhfiBblNnpvBICsBlzPeart4GVlkTY1TufcXQ9XZAvuH5VN00v5lbeKf8');
@@ -59,7 +57,7 @@ module.exports = async (req, res) => {
                 name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: unitAmount, // ← 修正済み！100倍しない
+              unit_amount: unitAmount,
             },
             quantity: 1,
           },
@@ -72,6 +70,8 @@ module.exports = async (req, res) => {
           name: name,
           email: email,
           details: details,
+          plan_name: planName, // ✅ 追加しました
+          price: unitAmount, // ✅ 追加しました（決済画面は unit_amount で正常なので OK）
         },
       });
 
