@@ -11,20 +11,16 @@ module.exports = async (req, res) => {
   const { session_id } = req.query;
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items'],
-    });
+    const session = await stripe.checkout.sessions.retrieve(session_id);
 
     const metadata = session.metadata || {};
 
-    const planName = session.line_items?.data?.[0]?.price?.product_data?.name || '不明';
-    const price = session.line_items?.data?.[0]?.price?.unit_amount || '不明';
-
     res.status(200).json({
-      planName: planName,
-      price: price,
+      planName: metadata.plan_name || '不明',
+      price: session.amount_total ? session.amount_total / 100 : '不明',
       videoUrl: metadata.video_url || '不明',
       details: metadata.details || '不明',
+      name: metadata.name || '不明',
       email: metadata.email || '不明',
       orderId: session.id || '不明',
     });
