@@ -1,145 +1,121 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>きほんプラン - VTuber切り抜きサービス</title>
-    <style>
-        body {
-            font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-            background-color: #FFF8EF;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-section {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-section img {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        .purchase-form {
-            background-color: #FFFFFF;
-            padding: 30px;
-            margin-top: 10px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .purchase-form h2 {
-            color: #FF9D00;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        .purchase-form label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        .purchase-form input, .purchase-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #FF9D00;
-            border-radius: 5px;
-        }
-        .purchase-form button {
-            background-color: #FF9D00;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        footer {
-            width: 100%;
-            background-color: #FFA500;
-            padding: 5px;
-            text-align: center;
-            color: #555;
-            position: relative;
-            justify-content: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>きほんプラン - 入力フォーム</title>
+  <style>
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+      background-color: #FFF8EF;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .header-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #FFA500;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #FFFFFF;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    h1 {
+      color: #FF9D00;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    label {
+      width: 100%;
+      text-align: left;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 2px solid #FF9D00;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #FF9D00;
+      color: white;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    footer {
+      width: 100%;
+      background-color: #FFA500;
+      padding: 5px 5px;
+      text-align: center;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="form-section">
-            <img src="images/Plan1.jpg" alt="きほんプラン画像">
-        </div>
-        <div class="purchase-form">
-            <h2>きほんプラン - 購入フォーム</h2>
-            <p><strong>価格:</strong> ¥3,000</p>
-            <form id="checkout-form">
-                <label for="video-url">切り抜き元のURL:</label>
-                <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
-※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
+  <div class="header-bar"></div>
 
-                <label for="details">希望詳細:</label>
-                <textarea id="details" name="details" rows="4" required placeholder="例:15:00〜17:30あたりを切り抜いてください！"></textarea>
+  <div class="container">
+    <h1>きほんプラン - 入力フォーム</h1>
+    <form id="payment-form">
+      <label for="videoUrl">切り抜き元の動画URL</label>
+      <input type="url" id="videoUrl" name="videoUrl" placeholder="例: https://www.youtube.com/watch?v=xxxx" required />
 
-                <label for="name">名前:</label>
-                <input type="text" id="name" name="name" required placeholder="お名前を入力してください">
+      <label for="details">希望詳細</label>
+      <textarea id="details" name="details" rows="4" placeholder="カットしてほしい範囲など" required></textarea>
 
-                <label for="email">メールアドレス:</label>
-                <input type="email" id="email" name="email" required placeholder="メールアドレスを入力してください">
+      <label for="name">お名前（連絡用）</label>
+      <input type="text" id="name" name="name" placeholder="例: 山田太郎" required />
 
-                <button type="submit">購入する</button>
-            </form>
-        </div>
-    </div>
-    <footer>
-        <p class="copyright">© 2024 Vagency</p>
-    </footer>
+      <label for="email">メールアドレス</label>
+      <input type="email" id="email" name="email" placeholder="例: example@example.com" required />
 
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        document.getElementById('checkout-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
+      <button type="submit">支払いへ進む</button>
+    </form>
+  </div>
 
-            const videoUrl = document.getElementById('video-url').value;
-            const details = document.getElementById('details').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+  <footer>
+    © 2024 Vagency
+  </footer>
 
-            const apiUrl = window.location.hostname === 'localhost' 
-                ? 'http://localhost:4242/create-checkout-session'
-                : '/api/create-checkout-session';
+  <script>
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ videoUrl, details, name, email, plan: 'きほんプラン', amount: 3000 }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`サーバーエラー: ${response.status}`);
-                }
-
-                const session = await response.json();
-                const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
-                const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
-
-                if (error) {
-                    alert(`決済画面の読み込みエラー: ${error.message}`);
-                }
-            } catch (error) {
-                console.error('エラーが発生しました:', error);
-                alert(`エラーが発生しました: ${error.message}`);
-            }
+      try {
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
-    </script>
+
+        const session = await response.json();
+
+        if (session.sessionId) {
+          window.location.href = `https://checkout.stripe.com/pay/${session.sessionId}`;
+        } else {
+          alert('セッションIDが取得できませんでした。');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('エラーが発生しました。時間を置いて再度お試しください。');
+      }
+    });
+  </script>
 </body>
 </html>
