@@ -12,16 +12,17 @@ module.exports = async (req, res) => {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ['line_items.data.price.product'],
+      expand: ['line_items'],
     });
 
     const metadata = session.metadata || {};
-    const lineItem = session.line_items.data[0];
-    const productData = lineItem?.price?.product;
+
+    const planName = session.line_items?.data?.[0]?.price?.product_data?.name || '不明';
+    const price = session.line_items?.data?.[0]?.price?.unit_amount || '不明';
 
     res.status(200).json({
-      planName: productData?.name || '不明',
-      price: lineItem?.price?.unit_amount ? (lineItem.price.unit_amount / 100) : '不明',
+      planName: planName,
+      price: price,
       videoUrl: metadata.video_url || '不明',
       details: metadata.details || '不明',
       email: metadata.email || '不明',
