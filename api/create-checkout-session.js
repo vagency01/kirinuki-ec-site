@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/api/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://kirinuki-ec-site.vercel.app'}/cancel.html`,
         metadata: {
           video_url: videoUrl,
