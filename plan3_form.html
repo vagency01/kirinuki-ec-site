@@ -16,41 +16,35 @@
             margin: 0 auto;
             padding: 20px;
         }
-
         .form-section {
             text-align: center;
-            margin-bottom: 20px; /* 画像とフォームの間隔を狭めました */
+            margin-bottom: 20px;
         }
-
         .form-section img {
             width: 100%;
-            max-width: 200px; /* プラン画像のサイズを6分の1に調整 */
+            max-width: 200px;
             height: auto;
             margin-bottom: 20px;
         }
-
         .purchase-form {
             background-color: #FFFFFF;
             padding: 30px;
-            margin-top: 10px; /* フォームの上部の間隔を狭めました */
+            margin-top: 10px;
             border-radius: 10px;
             width: 100%;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
-
         .purchase-form h2 {
             color: #FF9D00;
             font-size: 2em;
             margin-bottom: 20px;
         }
-
         .purchase-form label {
             display: block;
             margin: 10px 0 5px;
         }
-
         .purchase-form input, .purchase-form textarea {
             width: 100%;
             padding: 10px;
@@ -58,7 +52,6 @@
             border: 2px solid #FF9D00;
             border-radius: 5px;
         }
-
         .purchase-form button {
             background-color: #FF9D00;
             color: white;
@@ -69,7 +62,6 @@
             text-decoration: none;
             display: inline-block;
         }
-
         footer {
             width: 100%;
             background-color: #FFA500;
@@ -79,26 +71,22 @@
             position: relative;
             justify-content: center;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- プラン3画像 -->
         <div class="form-section">
             <img src="images/Plan3.jpg" alt="プラン3画像">
         </div>
-        
-        <!-- 購入フォーム -->
         <div class="purchase-form">
             <h2>プラン3 - 購入フォーム</h2>
-            <form action="#" method="POST">
+            <form id="checkout-form">
                 <label for="video-url">切り抜き元のURL:</label>
-                <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
+                <textarea id="video-url" name="video-url" required placeholder="イラストの元データのURLをお送りください📎
 ※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
 
                 <label for="details">希望詳細:</label>
-                <textarea id="details" name="details" rows="4" required placeholder="例:15:00〜17:30あたりを切り抜いてください！"></textarea>
+                <textarea id="details" name="details" rows="4" required placeholder="例:かわいいイラスト風で切り抜いてください！"></textarea>
 
                 <label for="name">名前:</label>
                 <input type="text" id="name" name="name" required placeholder="お名前を入力してください">
@@ -111,9 +99,55 @@
         </div>
     </div>
 
-    <!-- フッター -->
     <footer>
         <p class="copyright">© 2024 Vagency</p>
     </footer>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.getElementById('checkout-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const videoUrl = document.getElementById('video-url').value;
+            const details = document.getElementById('details').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            const apiUrl = window.location.hostname === 'localhost' 
+                ? 'http://localhost:4242/create-checkout-session'
+                : '/api/create-checkout-session';
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        videoUrl: videoUrl,
+                        details: details,
+                        name: name,
+                        email: email,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`サーバーエラー: ${response.status}`);
+                }
+
+                const session = await response.json();
+
+                const stripe = Stripe('pk_test_51RAZVXBRsJ5pZ702ZQl5MCbuMv7OmUOnzT85tKZpqd85WgkIK5WposdIWvNqH5p2zU0uETtRiGBhnXk0F1b4KwgD00TnKCujHW');
+                const { error } = await stripe.redirectToCheckout({ sessionId: session.sessionId });
+
+                if (error) {
+                    alert(`決済画面の読み込みエラー: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('エラーが発生しました:', error);
+                alert(`エラーが発生しました: ${error.message}`);
+            }
+        });
+    </script>
 </body>
 </html>
