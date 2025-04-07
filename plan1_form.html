@@ -85,10 +85,6 @@
 
     <h1>きほんプラン - 入力フォーム</h1>
     <form id="checkout-form">
-      <!-- hidden input プラン名と価格 -->
-      <input type="hidden" name="planName" value="きほんプラン" />
-      <input type="hidden" name="price" value="3000" />
-
       <label for="video-url">切り抜き元のURL:</label>
       <textarea id="video-url" name="video-url" required placeholder="YouTubeの配信URLや録画した動画のデータをお送りください📎
 ※ギガファイル便を使う場合は保存期限を100日に指定した後にアップロードしてください"></textarea>
@@ -115,8 +111,10 @@
     document.getElementById('checkout-form').addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
+      const videoUrl = document.getElementById('video-url').value;
+      const details = document.getElementById('details').value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
 
       const apiUrl = window.location.hostname === 'localhost'
         ? 'http://localhost:4242/create-checkout-session'
@@ -126,7 +124,14 @@
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            videoUrl: videoUrl,
+            details: details,
+            name: name,
+            email: email,
+            planName: 'きほんプラン', // ← ここでプラン名を渡す！
+            price: 3000 // ← 金額を整数で (¥3,000 = 3000)
+          }),
         });
 
         if (!response.ok) {
