@@ -12,6 +12,7 @@ const corsHandler = cors({
 });
 
 module.exports = async (req, res) => {
+  // CORSヘッダーを適用
   await new Promise((resolve, reject) => {
     corsHandler(req, res, (result) => {
       if (result instanceof Error) {
@@ -58,7 +59,7 @@ module.exports = async (req, res) => {
                 name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: unitAmount * 100, // Stripeは最小単位（円なら「円 × 100」）
+              unit_amount: unitAmount, // ← 修正済み！100倍しない
             },
             quantity: 1,
           },
@@ -67,8 +68,6 @@ module.exports = async (req, res) => {
         success_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://vkirinukiproject.vercel.app'}/cancel.html`,
         metadata: {
-          planName: planName,
-          price: unitAmount,
           video_url: videoUrl,
           name: name,
           email: email,
