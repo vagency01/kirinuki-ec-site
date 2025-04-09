@@ -15,6 +15,8 @@
       max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
     /* ヘッダー帯 */
     .header-bar {
@@ -25,40 +27,45 @@
     .banner {
       background-color: #FFFFFF;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
       margin-bottom: 30px;
       border-radius: 10px;
+      box-sizing: border-box;
     }
     .banner img {
       width: 100%;
       max-width: 1600px;
       height: auto;
       display: block;
-      margin: 0;
+      margin: 0 auto;
     }
     .plans {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       margin-bottom: 50px;
+      gap: 20px;
     }
     .plan {
       background-color: #FFFFFF;
-      width: 30%;
+      width: calc(33.333% - 14px);
       padding: 20px;
       text-align: center;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-sizing: border-box;
     }
     .plan img {
       width: 100%;
       height: auto;
       display: block;
-      margin: 0;
+      margin: 0 auto;
     }
     .plan h2 {
       margin: 15px 0;
+      font-size: 1.3em;
     }
     .plan p {
       margin: 5px 0;
@@ -76,6 +83,20 @@
       border-radius: 20px;
       cursor: pointer;
       font-weight: bold;
+      width: 100%;
+      max-width: 200px;
+      /* 立体的なボタンのスタイル */
+      box-shadow: 0 4px 0 #E88C00;
+      position: relative;
+      top: 0;
+      transition: all 0.2s ease;
+    }
+    .buy-button:hover {
+      background-color: #FFF5E6;
+    }
+    .buy-button:active {
+      box-shadow: 0 1px 0 #E88C00;
+      top: 3px;
     }
     .video-samples {
       text-align: center;
@@ -86,13 +107,23 @@
     }
     .videos {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
+      gap: 20px;
     }
     .video {
-      width: 30%;
+      width: calc(33.333% - 14px);
       background-color: #FFFFFF;
       padding: 20px;
       border-radius: 10px;
+      box-sizing: border-box;
+    }
+    .video h3 {
+      font-size: 1.1em;
+    }
+    .video iframe {
+      aspect-ratio: 16/9;
+      height: auto;
     }
     .flow {
       text-align: center;
@@ -119,15 +150,28 @@
       text-decoration: none;
       display: inline-block;
       margin-top: 20px;
+      /* 立体的なボタンのスタイル */
+      box-shadow: 0 4px 0 #D98000;
+      position: relative;
+      top: 0;
+      transition: all 0.2s ease;
+    }
+    .request-button:hover {
+      background-color: #FFA827;
+    }
+    .request-button:active {
+      box-shadow: 0 1px 0 #D98000;
+      top: 3px;
     }
     footer {
       width: 100%;
       background-color: #FFA500;
-      padding: 5px 5px;
+      padding: 15px 5px;
       text-align: center;
       color: #555;
       position: relative;
       justify-content: center;
+      box-sizing: border-box;
     }
     .footer-content {
       max-width: 1200px;
@@ -152,6 +196,55 @@
       height: 1.3em;
       width: auto;
       cursor: pointer;
+    }
+    
+    /* レスポンシブ対応のためのメディアクエリ */
+    @media (max-width: 768px) {
+      /* 横2列のレイアウトに */
+      .plan {
+        width: calc(50% - 10px);
+      }
+      .video {
+        width: calc(50% - 10px);
+      }
+      
+      /* 3つ目は下段中央に */
+      .plans .plan:nth-child(3) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .videos .video:nth-child(3) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    
+    /* 小さい画面用の追加調整 */
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      .banner {
+        padding: 10px;
+      }
+      .plan h2 {
+        font-size: 1.2em;
+      }
+      .buy-button {
+        padding: 8px 15px;
+      }
+      .flow h2 {
+        font-size: 1.3em;
+      }
+      
+      /* 画面が非常に小さい場合は1列に戻す */
+      .plan {
+        width: 100%;
+      }
+      .video {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -204,17 +297,17 @@
       <div class="videos">
         <div class="video">
           <h3>動画サンプル①</h3>
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="100%" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
         <div class="video">
           <h3>動画サンプル②</h3>
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="100%" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
         <div class="video">
           <h3>動画サンプル③</h3>
-          <iframe width="100%" height="315" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe width="100%" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
     </div>
