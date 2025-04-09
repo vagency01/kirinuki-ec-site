@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
     try {
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card', 'konbini', 'link'], // ✅ 修正済み！「link」が Apple Pay / Google Pay をカバー
+        payment_method_types: ['card', 'konbini', 'link'],
         line_items: [
           {
             price_data: {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
                 name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: price * 100,
+              unit_amount: price, // ✅ これが正解（*100 消してある！）
             },
             quantity: 1,
           },
