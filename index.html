@@ -220,7 +220,7 @@
       }
     }
     
-    /* 小さい画面用の追加調整 */
+    /* 小さい画面用の追加調整 - 2列を維持 */
     @media (max-width: 480px) {
       .container {
         padding: 10px;
@@ -228,22 +228,29 @@
       .banner {
         padding: 10px;
       }
-      .plan h2 {
-        font-size: 1.2em;
-      }
-      .buy-button {
-        padding: 8px 15px;
-      }
-      .flow h2 {
-        font-size: 1.3em;
-      }
-      
-      /* 画面が非常に小さい場合は1列に戻す */
       .plan {
-        width: 100%;
+        padding: 10px;
       }
       .video {
-        width: 100%;
+        padding: 10px;
+      }
+      .plan h2 {
+        font-size: 1em;
+        margin: 10px 0;
+      }
+      .plan p {
+        font-size: 0.9em;
+        min-height: 30px;
+      }
+      .buy-button {
+        padding: 6px 12px;
+        font-size: 0.9em;
+      }
+      .flow h2 {
+        font-size: 1.2em;
+      }
+      .video h3 {
+        font-size: 1em;
       }
     }
   </style>
