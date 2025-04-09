@@ -25,30 +25,11 @@ module.exports = async (req, res) => {
   }
 
   if (req.method === 'POST') {
-    const { videoUrl, details, name, email } = req.body;
-
-    let planName = '';
-    let unitAmount = 0;
-
-    // プランの判定（URLで判別）
-    const referer = req.headers.referer || '';
-    if (referer.includes('plan1_form.html')) {
-      planName = 'きほんプラン';
-      unitAmount = 3000;
-    } else if (referer.includes('plan2_form.html')) {
-      planName = 'おんぶにだっこプラン';
-      unitAmount = 4000;
-    } else if (referer.includes('plan3_form.html')) {
-      planName = 'ゆるイラスト切り抜き';
-      unitAmount = 8000;
-    } else {
-      planName = '不明なプラン';
-      unitAmount = 0;
-    }
+    const { videoUrl, details, name, email, planName, price } = req.body;
 
     try {
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
+        payment_method_types: ['card', 'konbini', 'paypay'],
         line_items: [
           {
             price_data: {
@@ -57,7 +38,7 @@ module.exports = async (req, res) => {
                 name: planName,
                 description: `希望詳細: ${details}`,
               },
-              unit_amount: unitAmount,
+              unit_amount: price * 100,
             },
             quantity: 1,
           },
@@ -70,8 +51,8 @@ module.exports = async (req, res) => {
           name: name,
           email: email,
           details: details,
-          plan_name: planName, // ✅ 追加しました
-          price: unitAmount, // ✅ 追加しました（決済画面は unit_amount で正常なので OK）
+          planName: planName,
+          price: price,
         },
       });
 
