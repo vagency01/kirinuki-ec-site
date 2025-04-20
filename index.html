@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>VTuber切り抜きサービス</title>
   <style>
+    /* フォントの指定（DNP 秀英丸ゴシック Std）*/
     body {
-      font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
+      font-family: 'DNP 秀英丸ゴシック Std', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
       background-color: #fffae2; /* 背景色変更 */
       margin: 0;
       padding: 0;
@@ -116,44 +117,52 @@
       display: block;
       margin: 0 auto;
     }
-    .plan h2 {
-      margin: 15px 0;
-      font-size: 1.3em;
-    }
-    .plan p {
-      margin: 5px 0;
-      min-height: 40px;
-    }
     .plan .price {
-      margin-top: auto;
-      margin-bottom: 10px;
-      font-size: 1.2em;
+      margin-top: 0;
+      font-size: 1.8em;
+      margin-bottom: 0;
     }
     .plan .tax {
       font-size: 0.8em;
       color: #888;
+      text-align: right;
+      margin-top: 0;
     }
     .buy-button {
       background-color: #FFFFFF;
       color: #333;
-      border: 2px solid #FF9D00;
       padding: 10px 20px;
       border-radius: 20px;
       cursor: pointer;
       font-weight: bold;
       width: 100%;
       max-width: 200px;
-      /* 立体的なボタンのスタイル */
-      box-shadow: 0 4px 0 #E88C00;
       position: relative;
       top: 0;
       transition: all 0.2s ease;
     }
-    .buy-button:hover {
-      background-color: #FFF5E6;
+    .buy-button.plan1 {
+      border: 2px solid #eec41a;
+      box-shadow: 0 4px 0 #eec41a;
+    }
+    .buy-button.plan1:hover {
+      background-color: #fff8c2;
+    }
+    .buy-button.plan2 {
+      border: 2px solid #f39801;
+      box-shadow: 0 4px 0 #f39801;
+    }
+    .buy-button.plan2:hover {
+      background-color: #ffe2bd;
+    }
+    .buy-button.plan3 {
+      border: 2px solid #42b2ed;
+      box-shadow: 0 4px 0 #42b2ed;
+    }
+    .buy-button.plan3:hover {
+      background-color: #d2ecfb;
     }
     .buy-button:active {
-      box-shadow: 0 1px 0 #E88C00;
       top: 3px;
     }
     .video-samples {
@@ -208,7 +217,6 @@
       text-decoration: none;
       display: inline-block;
       margin-top: 20px;
-      /* 立体的なボタンのスタイル */
       box-shadow: 0 4px 0 #D98000;
       position: relative;
       top: 0;
@@ -240,10 +248,10 @@
       color: white;
       margin: 3px 0;
       padding: 0;
-      font-size: 1.2em; /* ← 「Vあげ」とは？ のサイズ調整 */
+      font-size: 1.2em;
     }
     .footer-content p {
-      margin: 0; /* ← 説明文とメールアドレスの間の隙間を消す */
+      margin: 0;
       padding: 0;
     }
     .copyright {
@@ -255,30 +263,19 @@
       width: auto;
       cursor: pointer;
     }
-    
-    /* レスポンシブ対応のためのメディアクエリ */
     @media (max-width: 768px) {
-      /* 横2列のレイアウトに */
       .plan {
         width: calc(50% - 10px);
       }
       .video {
         width: calc(50% - 10px);
       }
-      
-      /* 3つ目は下段中央に */
-      .plans .plan:nth-child(3) {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      
+      .plans .plan:nth-child(3),
       .videos .video:nth-child(3) {
         margin-left: auto;
         margin-right: auto;
       }
     }
-    
-    /* 小さい画面用の追加調整 - 2列を維持 */
     @media (max-width: 480px) {
       .header {
         padding: 6px 10px;
@@ -323,57 +320,49 @@
   </style>
 </head>
 <body>
-  <!-- ヘッダー -->
   <div class="header">
     <img src="images/Vage_Logo.png" alt="Vあげロゴ" />
     <div class="header-text">Shorts 動画切り抜きサービス</div>
   </div>
-
   <div class="container">
-    <!-- バナー画像 -->
     <div class="banner">
       <img src="images/banner2.png" alt="バナー画像" />
       <div class="overlay">
         <a href="#plans" class="scroll-button">料金プランを見る</a>
       </div>
     </div>
-
-    <!-- Vあげショート3つの特徴 -->
     <div class="features">
       <img src="images/Features.png" alt="Vあげショート3つの特徴" />
     </div>
-
-    <!-- プラン一覧 -->
     <div class="plans" id="plans">
       <div class="plan">
         <img src="images/Plan1.jpg" alt="きほんプラン画像" />
+        <p>指定いただいた場所から<br>動画を作ります！</p>
         <p class="price">価格: ¥3,000</p>
         <p class="tax">(税込)</p>
         <a href="plan1_form.html">
-          <button class="buy-button">このプランを購入</button>
+          <button class="buy-button plan1">このプランを購入</button>
         </a>
       </div>
-
       <div class="plan">
         <img src="images/Plan2.jpg" alt="おんぶにだっこプラン画像" />
+        <p>切り抜きポイントも<br>全ておまかせ！</p>
         <p class="price">価格: ¥4,000</p>
         <p class="tax">(税込)</p>
         <a href="plan2_form.html">
-          <button class="buy-button">このプランを購入</button>
+          <button class="buy-button plan2">このプランを購入</button>
         </a>
       </div>
-
       <div class="plan">
         <img src="images/Plan3.jpg" alt="ゆるイラスト切り抜き画像" />
+        <p>描きおろしレイアウトで<br>動画を作成！</p>
         <p class="price">価格: ¥8,000</p>
         <p class="tax">(税込)</p>
         <a href="plan3_form.html">
-          <button class="buy-button">このプランを購入</button>
+          <button class="buy-button plan3">このプランを購入</button>
         </a>
       </div>
     </div>
-
-    <!-- 動画サンプル -->
     <div class="video-samples">
       <h2>-制作実績-</h2>
       <div class="videos">
@@ -381,28 +370,22 @@
           <h3>実績①</h3>
           <iframe width="100%" src="https://www.youtube.com/embed/n3lnpTNxgfo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-
         <div class="video">
           <h3>実績②</h3>
           <iframe width="100%" src="https://www.youtube.com/embed/MvJj7lBlfvk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-
         <div class="video">
           <h3>実績③</h3>
           <iframe width="100%" src="https://www.youtube.com/embed/_G8N5jWIB3Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
     </div>
-
-    <!-- ご依頼の流れ -->
     <div class="flow">
       <h2>-ご依頼の流れ-</h2>
       <img src="images/IrainoNagare.jpg" alt="ご依頼の流れ" />
       <a href="#plans" class="request-button">ご依頼はコチラ</a>
     </div>
   </div>
-
-  <!-- フッター -->
   <footer>
     <div class="footer-content">
       <h2>「Vあげ」とは？</h2>
