@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-      background-color: #FFF8EF;
+      background-color: #fffae2; /* 背景色変更 */
       margin: 0;
       padding: 0;
     }
@@ -127,6 +127,11 @@
     .plan .price {
       margin-top: auto;
       margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    .plan .tax {
+      font-size: 0.8em;
+      color: #888;
     }
     .buy-button {
       background-color: #FFFFFF;
@@ -335,16 +340,15 @@
 
     <!-- Vあげショート3つの特徴 -->
     <div class="features">
-      <img src="images/ Features.png" alt="Vあげショート3つの特徴" />
+      <img src="images/Features.png" alt="Vあげショート3つの特徴" />
     </div>
 
     <!-- プラン一覧 -->
     <div class="plans" id="plans">
       <div class="plan">
         <img src="images/Plan1.jpg" alt="きほんプラン画像" />
-        <h2>きほん<br />プラン</h2>
-        <p>特定の場所から<br />動画を作ります！</p>
         <p class="price">価格: ¥3,000</p>
+        <p class="tax">(税込)</p>
         <a href="plan1_form.html">
           <button class="buy-button">このプランを購入</button>
         </a>
@@ -352,9 +356,8 @@
 
       <div class="plan">
         <img src="images/Plan2.jpg" alt="おんぶにだっこプラン画像" />
-        <h2>おんぶにだっこ<br />プラン</h2>
-        <p>リンクを送るだけで完成！<br /><br /></p>
         <p class="price">価格: ¥4,000</p>
+        <p class="tax">(税込)</p>
         <a href="plan2_form.html">
           <button class="buy-button">このプランを購入</button>
         </a>
@@ -362,9 +365,8 @@
 
       <div class="plan">
         <img src="images/Plan3.jpg" alt="ゆるイラスト切り抜き画像" />
-        <h2>ゆるイラスト<br />切り抜き</h2>
-        <p>イラストで切り抜きを<br />作ります！</p>
         <p class="price">価格: ¥8,000</p>
+        <p class="tax">(税込)</p>
         <a href="plan3_form.html">
           <button class="buy-button">このプランを購入</button>
         </a>
